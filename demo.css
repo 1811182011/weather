@@ -37,7 +37,27 @@ div {
   float: left;
 }
 
+.top .left .location {
+  font-size: 20px;
+}
+
 .top .right {
   padding: 20px;
   float: right;
+}
+
+.second .temperature {
+  font-size: 80px;
+}
+
+.second .air {
+  display: inline-block;
+  background: #2cc21e;
+  font-size: 12px;
+  padding: 2px;
+  border-radius: 15px;
+}
+
+.second .tip {
+  display: inline-block;
 }

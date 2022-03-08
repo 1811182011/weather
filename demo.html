@@ -15,8 +15,12 @@
         <div class="top whitewords">
             <div class="left">
                 <span class="location item">广州</span>
-                <span class="wheather item">今天：多云12℃~23℃</span>
+                <span class="wendu item">今天：多云12℃~23℃</span>
                 <span class="wind item">东北风3-4级</span>
+                <div class="changecity">切换城市</div>
+                <input class="input hidden" type="text" placeholder="输入城市名">
+                <button class="btn hidden">确定</button>
+
             </div>
             <div class="right">
                 <span class="day item">03月07日</span>
@@ -29,13 +33,102 @@
             <div class="air">33 优</div>
             <div class="tip">
                 <span class="sun item">晴</span>
-                <span class="wind item">北风</span>
-                <span class="win2 item">5级</span>
+                <span class="sunrise item">北风</span>
+                <span class="sunset item">5级</span>
             </div>
         </div>
 
     </div>
+    <div class="weather whitewords typearea">
+        <h3>7天天气预报</h3>
+        <!-- <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div>
+        <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div>
+        <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div>
+        <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div>
+        <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div>
+        <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div>
+        <div class="weatherday"><h1>今天</h1><h1>03/07</h1><h1 class="iconfont icon-tianqi-1"></h1><h1>23℃</h1><h1>12℃</h1><h1>3-4级</h1><div>优</div></div> -->
 
+        
+    </div>
+    <script src="./http.js"></script>
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script>
+        window.onload=function(){
+            let weathercity ='上海市';
+            let location = document.querySelector('.location')
+            let wendu = document.querySelector('.wendu')
+            let wind = document.querySelector('.wind')
+            let day = document.querySelector('.day')
+            let week = document.querySelector('.week')
+            let month = document.querySelector('.month')
+            let temperature = document.querySelector('.temperature')
+            let air = document.querySelector('.air')
+            let sunrise = document.querySelector('.sunrise')
+            let sunset = document.querySelector('.sunset')
+            let weather = document.querySelector('.weather')
+            let changecity = document.querySelector('.changecity')
+            let hidden = document.querySelector('.hidden')
+            let appear = document.querySelector('.appear')
+            let input = document.querySelector('.input')
+            let btn = document.querySelector('.btn')
+            changecity.onclick=function(){
+                input.classList.remove('hidden')
+                btn.classList.remove('hidden')
+                
+
+            }
+            btn.onclick=function(){
+                input.classList.add('hidden')
+                btn.classList.add('hidden')
+               
+                $(".weatherday").remove();
+                weathercity=input.value
+                
+                getweather()
+
+            }
+            
+            
+            function getweather(){
+                http.promiseAjax({
+                    type:'get',
+                    url:'http://api.tianapi.com/tianqi/index?key=34f200ce667e79f99891e41a8fcf37d1',
+                    params:{
+                        city:weathercity,
+                    }
+                }).then(data=>{
+                    location.innerHTML=data.newslist[0].area
+                    wendu.innerHTML=`今天：${data.newslist[0].highest}~${data.newslist[0].lowest}`
+                    wind.innerHTML=`${data.newslist[0].wind}${data.newslist[0].windsc}`
+                    day.innerHTML=data.newslist[0].date
+                    week.innerHTML=data.newslist[0].week
+                    month.innerHTML=data.newslist[0].weather
+                    temperature.innerHTML=data.newslist[0].real
+                    sunrise.innerHTML=`日出时间：${data.newslist[0].sunrise}`
+                    sunset.innerHTML=`日落时间：${data.newslist[0].sunset}`
+                    data.newslist.forEach(function(ele,i){
+                        console.log(ele);
+                        let div = document.createElement('div');
+                        div.classList.add('weatherday');
+                        let html =``;
+                        html =`<h1>${ele.week}</h1><h1>${ele.date}</h1><img src="${ele.weatherimg}" alt=""><h1>${ele.highest}</h1><h1>${ele.lowest}</h1><h1>${ele.wind}</h1><h1>${ele.windsc}</h1><div>优</div>`
+                        div.innerHTML=html;
+                        weather.appendChild(div)
+                        
+                    })
+                    
+
+                })
+
+
+
+                
+            }
+            getweather()
+
+        }
+    </script>
 
 </body>
 
